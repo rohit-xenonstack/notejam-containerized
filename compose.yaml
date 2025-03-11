@@ -11,6 +11,7 @@ services:
   server:
     build:
       context: .
+    image: rohitxenonstack/notejam-web:latest
     environment:
       NODE_ENV: production
       POSTGRES_HOST: db
