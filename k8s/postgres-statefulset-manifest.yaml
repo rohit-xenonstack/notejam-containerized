@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+  namespace: notejam
+spec:
+  selector:
+    matchLabels:
+      app: postgres
+  serviceName: postgres
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: postgres
+          image: postgres:17.4-alpine
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5432
+              name: postgres-port
+          envFrom:
+            - secretRef:
+                name: postgres
+            - configMapRef:
+                name: notejam
+          volumeMounts:
+            - name: postgres-volume
+              mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+    - metadata:
+        name: postgres-volume
+        labels:
+          app: postgres
+      spec:
+        resources:
+          requests:
+            storage: 512Mi
+        accessModes: ["ReadWriteOnce"]

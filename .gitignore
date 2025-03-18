@@ -2,3 +2,4 @@ node_modules/
 db/
 .env
 .DS_Store
+k8s/secret-manifest.yaml

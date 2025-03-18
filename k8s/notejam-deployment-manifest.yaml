@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notejam
+  namespace: notejam
+spec:
+  selector:
+    matchLabels:
+      app: notejam
+  template:
+    metadata:
+      labels:
+        app: notejam
+    spec:
+      containers:
+        - name: notejam
+          image: rohitxenonstack/notejam-web
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+          ports:
+            - containerPort: 3000
+              name: notejam-port
+          envFrom:
+            - secretRef:
+                name: postgres
+            - configMapRef:
+                name: notejam
